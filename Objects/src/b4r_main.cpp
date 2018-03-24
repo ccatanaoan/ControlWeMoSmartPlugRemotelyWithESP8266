@@ -22,45 +22,45 @@ static B4R::B4RString be_gann7_5;
 const UInt cp = B4R::StackMemory::cp;
 B4R::B4RString be_ann13_5;
 B4R::B4RString be_ann13_7;
- //BA.debugLineNum = 25;BA.debugLine="Private Sub AppStart";
- //BA.debugLineNum = 26;BA.debugLine="Serial1.Initialize(115200)";
+ //BA.debugLineNum = 23;BA.debugLine="Private Sub AppStart";
+ //BA.debugLineNum = 24;BA.debugLine="Serial1.Initialize(115200)";
 b4r_main::_serial1->Initialize((ULong) (115200));
- //BA.debugLineNum = 27;BA.debugLine="Delay(3000)";
+ //BA.debugLineNum = 25;BA.debugLine="Delay(3000)";
 Common_Delay((ULong) (3000));
- //BA.debugLineNum = 28;BA.debugLine="Log(\"AppStart\")";
+ //BA.debugLineNum = 26;BA.debugLine="Log(\"AppStart\")";
 B4R::Common::LogHelper(1,102,F("AppStart"));
- //BA.debugLineNum = 29;BA.debugLine="If WiFi.Connect2(\"Rise Above This Home\",\"SteelRes";
+ //BA.debugLineNum = 27;BA.debugLine="If WiFi.Connect2(\"Rise Above This Home\",\"SteelRes";
 if (b4r_main::_wifi->Connect2(be_ann13_5.wrap("Rise Above This Home"),be_ann13_7.wrap("SteelReserve"))) { 
- //BA.debugLineNum = 30;BA.debugLine="Log(\"Connected to router.\")";
-B4R::Common::LogHelper(1,102,F("Connected to router."));
+ //BA.debugLineNum = 28;BA.debugLine="Log(\"Connected to WiFi. IP: \", WiFi.LocalIp)";
+B4R::Common::LogHelper(2,102,F("Connected to WiFi. IP: "),101,b4r_main::_wifi->getLocalIp()->data);
  }else {
- //BA.debugLineNum = 32;BA.debugLine="Log(\"Failed to connect to router.\")";
-B4R::Common::LogHelper(1,102,F("Failed to connect to router."));
- //BA.debugLineNum = 33;BA.debugLine="Return";
+ //BA.debugLineNum = 30;BA.debugLine="Log(\"Failed to connect to router\")";
+B4R::Common::LogHelper(1,102,F("Failed to connect to router"));
+ //BA.debugLineNum = 31;BA.debugLine="Return";
 B4R::StackMemory::cp = cp;
 if (true) return ;
  };
- //BA.debugLineNum = 36;BA.debugLine="Connect(0)";
+ //BA.debugLineNum = 34;BA.debugLine="Connect(0)";
 _connect((Byte) (0));
- //BA.debugLineNum = 37;BA.debugLine="End Sub";
+ //BA.debugLineNum = 35;BA.debugLine="End Sub";
 B4R::StackMemory::cp = cp;
 }
 void b4r_main::_connect(Byte _unused){
 const UInt cp = B4R::StackMemory::cp;
- //BA.debugLineNum = 39;BA.debugLine="Sub Connect(unused As Byte)";
- //BA.debugLineNum = 40;BA.debugLine="If server.ConnectIP(serverIp,serverPort) Then";
+ //BA.debugLineNum = 37;BA.debugLine="Sub Connect(unused As Byte)";
+ //BA.debugLineNum = 38;BA.debugLine="If server.ConnectIP(serverIp,serverPort) Then";
 if (b4r_main::_server->ConnectIP(b4r_main::_serverip,(UInt)(atof(b4r_main::_serverport->data)))) { 
- //BA.debugLineNum = 41;BA.debugLine="Log(\"Connected to Wemo\")";
+ //BA.debugLineNum = 39;BA.debugLine="Log(\"Connected to Wemo\")";
 B4R::Common::LogHelper(1,102,F("Connected to Wemo"));
- //BA.debugLineNum = 42;BA.debugLine="GetWemoState";
+ //BA.debugLineNum = 40;BA.debugLine="GetWemoState";
 _getwemostate();
  }else {
- //BA.debugLineNum = 44;BA.debugLine="Log(\"Connection failed\")";
+ //BA.debugLineNum = 42;BA.debugLine="Log(\"Connection failed\")";
 B4R::Common::LogHelper(1,102,F("Connection failed"));
- //BA.debugLineNum = 45;BA.debugLine="CallSubPlus(\"Connect\", 2000, 0)";
+ //BA.debugLineNum = 43;BA.debugLine="CallSubPlus(\"Connect\", 2000, 0)";
 B4R::__c->CallSubPlus(_connect,(ULong) (2000),(Byte) (0));
  };
- //BA.debugLineNum = 47;BA.debugLine="End Sub";
+ //BA.debugLineNum = 45;BA.debugLine="End Sub";
 B4R::StackMemory::cp = cp;
 }
 void b4r_main::_getwemostate(){
@@ -78,16 +78,16 @@ B4R::B4RString be_ann53_40;
 B4R::B4RString be_ann53_44;
 B4R::B4RString* be_ann53_45e1[11];
 B4R::Array be_ann53_45e2;
- //BA.debugLineNum = 69;BA.debugLine="Sub GetWemoState()";
- //BA.debugLineNum = 70;BA.debugLine="HttpJob.Initialize(\"WeMo\")";
+ //BA.debugLineNum = 67;BA.debugLine="Sub GetWemoState()";
+ //BA.debugLineNum = 68;BA.debugLine="HttpJob.Initialize(\"WeMo\")";
 b4r_main::_httpjob->_initialize(be_ann50_4.wrap("WeMo"));
- //BA.debugLineNum = 71;BA.debugLine="HttpJob.AddHeader(\"Content-type\", \"text/xml; char";
+ //BA.debugLineNum = 69;BA.debugLine="HttpJob.AddHeader(\"Content-type\", \"text/xml; char";
 b4r_main::_httpjob->_addheader((be_ann51_4.wrap("Content-type"))->GetBytes(),(be_ann51_6.wrap("text/xml; charset=\"utf-8\""))->GetBytes());
- //BA.debugLineNum = 72;BA.debugLine="HttpJob.AddHeader(\"SOAPACTION\", \"\"\"urn:Belkin:ser";
+ //BA.debugLineNum = 70;BA.debugLine="HttpJob.AddHeader(\"SOAPACTION\", \"\"\"urn:Belkin:ser";
 b4r_main::_httpjob->_addheader((be_ann52_4.wrap("SOAPACTION"))->GetBytes(),(be_ann52_6.wrap("\"urn:Belkin:service:basicevent:1#GetBinaryState\""))->GetBytes());
- //BA.debugLineNum = 73;BA.debugLine="HttpJob.Post(JoinStrings(Array As String(\"http://";
+ //BA.debugLineNum = 71;BA.debugLine="HttpJob.Post(JoinStrings(Array As String(\"http://";
 b4r_main::_httpjob->_post((B4R::__c->JoinStrings(be_ann53_45e2.create(be_ann53_45e1,11,100,be_ann53_12.wrap("http://"),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (0)))[B4R::Array::staticIndex])),be_ann53_19.wrap("."),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (1)))[B4R::Array::staticIndex])),be_ann53_26.wrap("."),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (2)))[B4R::Array::staticIndex])),be_ann53_33.wrap("."),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (3)))[B4R::Array::staticIndex])),be_ann53_40.wrap(":"),b4r_main::_serverport,be_ann53_44.wrap("/upnp/control/basicevent1"))))->GetBytes(),(b4r_main::_getbinarystate)->GetBytes());
- //BA.debugLineNum = 74;BA.debugLine="End Sub";
+ //BA.debugLineNum = 72;BA.debugLine="End Sub";
 B4R::StackMemory::cp = cp;
 }
 void b4r_main::_jobdone(_jobresult* _job){
@@ -96,37 +96,37 @@ B4R::B4RString be_ann33_9;
 B4R::B4RString be_ann36_9;
 B4R::Object be_ann44_6;
 B4R::Object be_ann46_4;
- //BA.debugLineNum = 49;BA.debugLine="Sub JobDone (Job As JobResult)";
- //BA.debugLineNum = 50;BA.debugLine="Log(\"*******************************\")";
+ //BA.debugLineNum = 47;BA.debugLine="Sub JobDone (Job As JobResult)";
+ //BA.debugLineNum = 48;BA.debugLine="Log(\"*******************************\")";
 B4R::Common::LogHelper(1,102,F("*******************************"));
- //BA.debugLineNum = 51;BA.debugLine="If Job.Success Then";
+ //BA.debugLineNum = 49;BA.debugLine="If Job.Success Then";
 if (_job->Success) { 
- //BA.debugLineNum = 52;BA.debugLine="If bc.IndexOf(Job.Response,\"<BinaryState>1</Bina";
+ //BA.debugLineNum = 50;BA.debugLine="If bc.IndexOf(Job.Response,\"<BinaryState>1</Bina";
 if (b4r_main::_bc->IndexOf(_job->Response,(be_ann33_9.wrap("<BinaryState>1</BinaryState>"))->GetBytes())>-1) { 
- //BA.debugLineNum = 53;BA.debugLine="Log(\"Wemo is ON\")";
+ //BA.debugLineNum = 51;BA.debugLine="Log(\"Wemo is ON\")";
 B4R::Common::LogHelper(1,102,F("Wemo is ON"));
- //BA.debugLineNum = 54;BA.debugLine="SetWemoState(0)";
+ //BA.debugLineNum = 52;BA.debugLine="SetWemoState(0)";
 _setwemostate(0);
  }else if(b4r_main::_bc->IndexOf(_job->Response,(be_ann36_9.wrap("<BinaryState>0</BinaryState>"))->GetBytes())>-1) { 
- //BA.debugLineNum = 56;BA.debugLine="Log(\"Wemo is OFF\")";
+ //BA.debugLineNum = 54;BA.debugLine="Log(\"Wemo is OFF\")";
 B4R::Common::LogHelper(1,102,F("Wemo is OFF"));
- //BA.debugLineNum = 57;BA.debugLine="SetWemoState(1)";
+ //BA.debugLineNum = 55;BA.debugLine="SetWemoState(1)";
 _setwemostate(1);
  }else {
- //BA.debugLineNum = 59;BA.debugLine="Log(\"Unknown\")";
+ //BA.debugLineNum = 57;BA.debugLine="Log(\"Unknown\")";
 B4R::Common::LogHelper(1,102,F("Unknown"));
- //BA.debugLineNum = 60;BA.debugLine="SetWemoState(0)";
+ //BA.debugLineNum = 58;BA.debugLine="SetWemoState(0)";
 _setwemostate(0);
  };
  }else {
- //BA.debugLineNum = 63;BA.debugLine="Log(\"ErrorMessage: \", Job.ErrorMessage)";
+ //BA.debugLineNum = 61;BA.debugLine="Log(\"ErrorMessage: \", Job.ErrorMessage)";
 B4R::Common::LogHelper(2,102,F("ErrorMessage: "),100,be_ann44_6.wrapPointer(_job->ErrorMessage));
- //BA.debugLineNum = 64;BA.debugLine="Log(\"Status: \", Job.Status)";
+ //BA.debugLineNum = 62;BA.debugLine="Log(\"Status: \", Job.Status)";
 B4R::Common::LogHelper(2,102,F("Status: "),3,_job->Status);
- //BA.debugLineNum = 65;BA.debugLine="Log(Job.Response)";
+ //BA.debugLineNum = 63;BA.debugLine="Log(Job.Response)";
 B4R::Common::LogHelper(1,100,be_ann46_4.wrapPointer(_job->Response));
  };
- //BA.debugLineNum = 67;BA.debugLine="End Sub";
+ //BA.debugLineNum = 65;BA.debugLine="End Sub";
 B4R::StackMemory::cp = cp;
 }
 
@@ -154,49 +154,11 @@ b4r_main::_serverport = be_gann5_5.wrap("49153");
 b4r_main::_bc = &be_gann6_3;
  //BA.debugLineNum = 20;BA.debugLine="Private GetBinaryState As String =\"<s:Envelope xm";
 b4r_main::_getbinarystate = be_gann7_5.wrap("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body><u:GetBinaryState xmlns:u=\"urn:Belkin:service:basicevent:1\"></u:GetBinaryState></s:Body></s:Envelope>");
- //BA.debugLineNum = 23;BA.debugLine="End Sub";
+ //BA.debugLineNum = 21;BA.debugLine="End Sub";
 }
 void b4r_main::_setwemostate(Int _state){
 const UInt cp = B4R::StackMemory::cp;
-B4R::B4RString be_ann58_4;
-B4R::B4RString be_ann59_4;
-B4R::B4RString be_ann59_6;
-B4R::B4RString be_ann60_4;
-B4R::B4RString be_ann60_6;
-B4R::B4RString be_ann66_12;
-B4R::B4RString be_ann66_19;
-B4R::B4RString be_ann66_26;
-B4R::B4RString be_ann66_33;
-B4R::B4RString be_ann66_40;
-B4R::B4RString be_ann66_44;
-B4R::B4RString* be_ann66_45e1[11];
-B4R::Array be_ann66_45e2;
-B4R::B4RString be_ann66_56;
-B4R::B4RString be_ann66_60;
-B4R::B4RString* be_ann66_61e1[3];
-B4R::Array be_ann66_61e2;
- //BA.debugLineNum = 76;BA.debugLine="Sub SetWemoState(state As Int)";
- //BA.debugLineNum = 77;BA.debugLine="Delay(10000)";
-Common_Delay((ULong) (10000));
- //BA.debugLineNum = 78;BA.debugLine="If server.Connected Then";
-if (b4r_main::_server->getConnected()) { 
- //BA.debugLineNum = 79;BA.debugLine="HttpJob.Initialize(\"WeMo\")";
-b4r_main::_httpjob->_initialize(be_ann58_4.wrap("WeMo"));
- //BA.debugLineNum = 80;BA.debugLine="HttpJob.AddHeader(\"Content-type\", \"text/xml; cha";
-b4r_main::_httpjob->_addheader((be_ann59_4.wrap("Content-type"))->GetBytes(),(be_ann59_6.wrap("text/xml; charset=\"utf-8\""))->GetBytes());
- //BA.debugLineNum = 81;BA.debugLine="HttpJob.AddHeader(\"SOAPACTION\", \"\"\"urn:Belkin:se";
-b4r_main::_httpjob->_addheader((be_ann60_4.wrap("SOAPACTION"))->GetBytes(),(be_ann60_6.wrap("\"urn:Belkin:service:basicevent:1#SetBinaryState\""))->GetBytes());
- //BA.debugLineNum = 82;BA.debugLine="If state = 1 Then";
-if (_state==1) { 
- //BA.debugLineNum = 83;BA.debugLine="Log(\"Wemo switched ON\")";
-B4R::Common::LogHelper(1,102,F("Wemo switched ON"));
- }else {
- //BA.debugLineNum = 85;BA.debugLine="Log(\"Wemo switched OFF\")";
-B4R::Common::LogHelper(1,102,F("Wemo switched OFF"));
- };
- //BA.debugLineNum = 87;BA.debugLine="HttpJob.Post(JoinStrings(Array As String(\"http:/";
-b4r_main::_httpjob->_post((B4R::__c->JoinStrings(be_ann66_45e2.create(be_ann66_45e1,11,100,be_ann66_12.wrap("http://"),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (0)))[B4R::Array::staticIndex])),be_ann66_19.wrap("."),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (1)))[B4R::Array::staticIndex])),be_ann66_26.wrap("."),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (2)))[B4R::Array::staticIndex])),be_ann66_33.wrap("."),B4R::B4RString::fromNumber((Long)(((Byte*)b4r_main::_serverip->getData((UInt) (3)))[B4R::Array::staticIndex])),be_ann66_40.wrap(":"),b4r_main::_serverport,be_ann66_44.wrap("/upnp/control/basicevent1"))))->GetBytes(),(B4R::__c->JoinStrings(be_ann66_61e2.create(be_ann66_61e1,3,100,be_ann66_56.wrap("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body><u:SetBinaryState xmlns:u=\"urn:Belkin:service:basicevent:1\"><BinaryState>"),B4R::B4RString::fromNumber((Long)(_state)),be_ann66_60.wrap("</BinaryState></u:SetBinaryState></s:Body></s:Envelope>"))))->GetBytes());
- };
- //BA.debugLineNum = 89;BA.debugLine="End Sub";
+ //BA.debugLineNum = 74;BA.debugLine="Sub SetWemoState(state As Int)";
+ //BA.debugLineNum = 87;BA.debugLine="End Sub";
 B4R::StackMemory::cp = cp;
 }

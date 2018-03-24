@@ -28,8 +28,6 @@ Sub Process_Globals
 	Private const serverPort As String = "49153"
 	Private bc As ByteConverter
 	Private GetBinaryState As String ="<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:GetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""></u:GetBinaryState></s:Body></s:Envelope>"
-'	Private SetWeMoOn As String ="<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:SetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""><BinaryState>1</BinaryState></u:SetBinaryState></s:Body></s:Envelope>"
-'	Private SetWeMoOff As String ="<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:SetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""><BinaryState>0</BinaryState></u:SetBinaryState></s:Body></s:Envelope>"
 End Sub
 
 Private Sub AppStart
@@ -37,9 +35,9 @@ Private Sub AppStart
 	Delay(3000)
 	Log("AppStart")
 	If WiFi.Connect2("Rise Above This Home","SteelReserve") Then
-		Log("Connected to router.")
+		Log("Connected to WiFi. IP: ", WiFi.LocalIp)
 	Else
-		Log("Failed to connect to router.")
+		Log("Failed to connect to router")
 		Return
 	End If
 	
@@ -84,21 +82,6 @@ Sub GetWemoState()
 End Sub
 
 Sub SetWemoState(state As Int)
-	Delay(10000)
-	If server.Connected Then
-		HttpJob.Initialize("WeMo")
-		HttpJob.AddHeader("Content-type", "text/xml; charset=""utf-8""")
-		HttpJob.AddHeader("SOAPACTION", """urn:Belkin:service:basicevent:1#SetBinaryState""")
-		If state = 1 Then
-			Log("Wemo switched ON")
-		Else
-			Log("Wemo switched OFF")
-		End If
-		HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),JoinStrings(Array As String("<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:SetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""><BinaryState>",state,"</BinaryState></u:SetBinaryState></s:Body></s:Envelope>")))
-	End If
-End Sub
-
-'Sub SetWemoState(state As Int)
 '	Delay(10000)
 '	If server.Connected Then
 '		HttpJob.Initialize("WeMo")
@@ -106,12 +89,11 @@ End Sub
 '		HttpJob.AddHeader("SOAPACTION", """urn:Belkin:service:basicevent:1#SetBinaryState""")
 '		If state = 1 Then
 '			Log("Wemo switched ON")
-'			HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),SetWeMoOn)
-'		Else 
+'		Else
 '			Log("Wemo switched OFF")
-'			HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),SetWeMoOff)
 '		End If
+'		HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),JoinStrings(Array As String("<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:SetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""><BinaryState>",state,"</BinaryState></u:SetBinaryState></s:Body></s:Envelope>")))
 '	End If
-'End Sub
+End Sub
 
 
