@@ -1,0 +1,117 @@
+﻿Version=2.2
+NumberOfModules=1
+Module1=HttpJob
+Build1=Default,B4RDev
+NumberOfFiles=0
+NumberOfLibraries=3
+Library1=rcore
+Library2=rrandomaccessfile
+Library3=resp8266wifi
+@EndOfDesignText@
+' I used the following sites To help me reach the outcome.
+'
+' WeMo Hacking - http://mattenoble.com/2013/08/07/wemo-hacking/
+
+#Region Project Attributes
+	#AutoFlushLogs: True
+	#CheckArrayBounds: True
+	#StackBufferSize: 2000
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'Public variables can be accessed from all modules.
+	Public Serial1 As Serial
+	Public WiFi As ESP8266WiFi
+	Private server As WiFiSocket
+	Private serverIp() As Byte = Array As Byte(192, 168, 0, 23)
+	Private const serverPort As String = "49153"
+	Private bc As ByteConverter
+	Private GetBinaryState As String ="<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:GetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""></u:GetBinaryState></s:Body></s:Envelope>"
+'	Private SetWeMoOn As String ="<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:SetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""><BinaryState>1</BinaryState></u:SetBinaryState></s:Body></s:Envelope>"
+'	Private SetWeMoOff As String ="<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:SetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""><BinaryState>0</BinaryState></u:SetBinaryState></s:Body></s:Envelope>"
+End Sub
+
+Private Sub AppStart
+	Serial1.Initialize(115200)
+	Delay(3000)
+	Log("AppStart")
+	If WiFi.Connect2("Rise Above This Home","SteelReserve") Then
+		Log("Connected to router.")
+	Else
+		Log("Failed to connect to router.")
+		Return
+	End If
+	
+	Connect(0)
+End Sub
+
+Sub Connect(unused As Byte)
+	If server.ConnectIP(serverIp,serverPort) Then
+		Log("Connected to Wemo")
+		GetWemoState
+	Else
+		Log("Connection failed")
+		CallSubPlus("Connect", 2000, 0)
+	End If
+End Sub
+
+Sub JobDone (Job As JobResult)
+	Log("*******************************")
+	If Job.Success Then
+		If bc.IndexOf(Job.Response,"<BinaryState>1</BinaryState>") > -1 Then
+			Log("Wemo is ON")
+			SetWemoState(0)
+		else If bc.IndexOf(Job.Response,"<BinaryState>0</BinaryState>") > -1 Then
+			Log("Wemo is OFF")
+			SetWemoState(1)
+		Else
+			Log("Unknown")
+			SetWemoState(0)
+		End If
+	Else
+		Log("ErrorMessage: ", Job.ErrorMessage)
+		Log("Status: ", Job.Status)
+		Log(Job.Response)
+	End If
+End Sub
+
+Sub GetWemoState() 
+	HttpJob.Initialize("WeMo")
+	HttpJob.AddHeader("Content-type", "text/xml; charset=""utf-8""")
+	HttpJob.AddHeader("SOAPACTION", """urn:Belkin:service:basicevent:1#GetBinaryState""")
+	HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),GetBinaryState)
+End Sub
+
+Sub SetWemoState(state As Int)
+	Delay(10000)
+	If server.Connected Then
+		HttpJob.Initialize("WeMo")
+		HttpJob.AddHeader("Content-type", "text/xml; charset=""utf-8""")
+		HttpJob.AddHeader("SOAPACTION", """urn:Belkin:service:basicevent:1#SetBinaryState""")
+		If state = 1 Then
+			Log("Wemo switched ON")
+		Else
+			Log("Wemo switched OFF")
+		End If
+		HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),JoinStrings(Array As String("<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"" s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/""><s:Body><u:SetBinaryState xmlns:u=""urn:Belkin:service:basicevent:1""><BinaryState>",state,"</BinaryState></u:SetBinaryState></s:Body></s:Envelope>")))
+	End If
+End Sub
+
+'Sub SetWemoState(state As Int)
+'	Delay(10000)
+'	If server.Connected Then
+'		HttpJob.Initialize("WeMo")
+'		HttpJob.AddHeader("Content-type", "text/xml; charset=""utf-8""")
+'		HttpJob.AddHeader("SOAPACTION", """urn:Belkin:service:basicevent:1#SetBinaryState""")
+'		If state = 1 Then
+'			Log("Wemo switched ON")
+'			HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),SetWeMoOn)
+'		Else 
+'			Log("Wemo switched OFF")
+'			HttpJob.Post(JoinStrings(Array As String("http://",serverIp(0),".",serverIp(1),".",serverIp(2),".",serverIp(3),":",serverPort,"/upnp/control/basicevent1")),SetWeMoOff)
+'		End If
+'	End If
+'End Sub
+
+
