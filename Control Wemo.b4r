@@ -8,7 +8,7 @@ Library1=rcore
 Library2=rrandomaccessfile
 Library3=resp8266wifi
 @EndOfDesignText@
-' Remotely Control Wemo Smart Plug Remotely With ESP8266
+' Remotely Control Wemo Smart Plug With ESP8266
 '
 ' I used the following sites To help me reach the outcome:
 '
