@@ -8,7 +8,9 @@ Library1=rcore
 Library2=rrandomaccessfile
 Library3=resp8266wifi
 @EndOfDesignText@
-' I used the following sites To help me reach the outcome.
+' Remotely Control Wemo Smart Plug Remotely With ESP8266
+'
+' I used the following sites To help me reach the outcome:
 '
 ' WeMo Hacking - http://mattenoble.com/2013/08/07/wemo-hacking/
 
